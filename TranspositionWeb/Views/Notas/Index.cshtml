@@ -4,38 +4,89 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Transposición de Notas</h1>
+<h3>DE: </h3>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
+@{
+
+    var listado = new List<SelectListItem>()
+{
+       new SelectListItem()
+       {
+           Text="C",
+           Value = "1"
+       },
+       new SelectListItem()
+       {
+           Text="Eb",
+           Value = "2"
+       },
+       new SelectListItem()
+       {
+           Text="Bb",
+           Value = "3"
+       },
+    };
+}
+<table class="table table-bordered">
+    @Html.DropDownList("myDropBox", listado)
+</table>
+
+<table class="table table-bordered">
+    <thead class="table-info">
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.notasCromaticas)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsChecked)
-            </th>
-            <th></th>
+            <th>C</th>
+            <th>Eb</th>
+            <th>Bb</th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
+        <tr>A
             <td>
-                @Html.DisplayFor(modelItem => item.notasCromaticas)
+                @Html.CheckBox("de", true)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.IsChecked)
+                @Html.CheckBox("de", false)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                @Html.CheckBox("de", false)
             </td>
         </tr>
-}
+    </tbody>
+
+</table>
+
+
+
+<table class="table">
+    @*<thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.notasCromaticas)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.IsChecked)
+                </th>
+                <th></th>
+            </tr>
+        </thead>*@
+
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.notasCromaticas) &nbsp; @Html.DisplayFor(modelItem => item.IsChecked)
+                </td>
+
+
+            @*<td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>*@
+
+        }
     </tbody>
 </table>

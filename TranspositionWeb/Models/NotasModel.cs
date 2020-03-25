@@ -12,7 +12,6 @@ namespace TranspositionWeb.Models
         public int Id { get; set; }
 
         [Required(AllowEmptyStrings = false)]
-
         public string notasCromaticas { get; set; }
 
         public bool IsChecked { get; set; }

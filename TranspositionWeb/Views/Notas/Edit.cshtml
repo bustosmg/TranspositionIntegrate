@@ -6,32 +6,69 @@
 
 <h1>Edit</h1>
 
-<h4>NotasModel</h4>
+<h4>Notas Model</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="notasCromaticas" class="control-label"></label>
-                <input asp-for="notasCromaticas" class="form-control" />
-                <span asp-validation-for="notasCromaticas" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsChecked" /> @Html.DisplayNameFor(model => model.IsChecked)
-                </label>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
+
+@*@Html.BeginForm("Edit", "Notas", FormMethod.Post)*@
+
+@using (Html.BeginForm("Edit", "Notas", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <table class="table">
+
+        <tr>
+            <td>
+                @*@Html.DisplayName(Model.notasCromaticas)*@
+                @*@Html.EditorFor(m => m.notasCromaticas, new { htmlAttributes = new { disabled = true } }) &nbsp; @Html.EditorFor(m => m.IsChecked)*@
+                @Html.EditorFor(m => m.notasCromaticas, new { htmlAttributes = new { @readonly = "readonly" } }) &nbsp; @Html.EditorFor(m => m.IsChecked)
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+
+                <input type="submit" value="Guardar" class="btn btn-primary" />
+            </td>
+        </tr>
+
+    </table>
+}
+
+
+@*<div class="row">
+        <div class="col-md-4">
+
+            <form asp-action="Edit">
+
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+
+                <div class="form-group">
+                    <label asp-for="notasCromaticas" class="control-label"></label>
+
+                    <input asp-for="notasCromaticas" class="form-control" />
+                    <span asp-validation-for="notasCromaticas" class="text-danger"></span>
+
+                </div>
+
+                <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="IsChecked" /> @Html.DisplayNameFor(model => model.IsChecked)
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+
+            </form>
+
+        </div>
+    </div>*@
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Principal</a>
 </div>
 
 @section Scripts {
