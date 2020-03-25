@@ -1,4 +1,5 @@
-﻿@model IEnumerable<TranspositionWeb.Models.NotasModel>
+﻿@*@model IEnumerable<TranspositionWeb.Models.NotasModel>*@
+@model List<TranspositionWeb.Models.NotasModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -7,30 +8,28 @@
 <h1>Transposición de Notas</h1>
 <h3>DE: </h3>
 
-@{
-
-    var listado = new List<SelectListItem>()
-{
-       new SelectListItem()
-       {
-           Text="C",
-           Value = "1"
-       },
-       new SelectListItem()
-       {
-           Text="Eb",
-           Value = "2"
-       },
-       new SelectListItem()
-       {
-           Text="Bb",
-           Value = "3"
-       },
-    };
-}
-<table class="table table-bordered">
-    @Html.DropDownList("myDropBox", listado)
-</table>
+@*var listado = new List<SelectListItem>()
+    {
+           new SelectListItem()
+           {
+               Text="C",
+               Value = "1"
+           },
+           new SelectListItem()
+           {
+               Text="Eb",
+               Value = "2"
+           },
+           new SelectListItem()
+           {
+               Text="Bb",
+               Value = "3"
+           },
+        };
+    }
+    <table class="table table-bordered">
+        @Html.DropDownList("myDropBox", listado)
+    </table>*@
 
 <table class="table table-bordered">
     <thead class="table-info">
@@ -41,7 +40,8 @@
         </tr>
     </thead>
     <tbody>
-        <tr>A
+        <tr>
+            A
             <td>
                 @Html.CheckBox("de", true)
             </td>
@@ -59,34 +59,42 @@
 
 
 <table class="table">
-    @*<thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.notasCromaticas)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.IsChecked)
-                </th>
-                <th></th>
-            </tr>
-        </thead>*@
+    @*<thead></thead>*@
 
     <tbody>
 
         @foreach (var item in Model)
         {
 
+        <td>
+            @Html.DisplayFor(modelItem => item.notasCromaticas) &nbsp; @Html.DisplayFor(modelItem => item.IsChecked)
+        </td>
+    }
+        </tbody>
+    </table>
+
+
+    @using (Html.BeginForm("Edit", "Notas", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <table class="table">
+
+            @foreach (var item in Model)
+            {   
+                @Html.HiddenFor(modelItem=>item.Id)
+                @Html.HiddenFor(modelItem=>item.notasCromaticas)
+            <td>
+                @*@Html.EditorFor(modelItem => item.notasCromaticas, new { htmlAttributes = new { @readonly = "readonly" } })*@  
+                @Html.DisplayFor(modelItem => item.notasCromaticas)  &nbsp; @Html.EditorFor(modelItem => item.IsChecked)
+            </td>
+            }
+
+            <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.notasCromaticas) &nbsp; @Html.DisplayFor(modelItem => item.IsChecked)
+                    <input type="submit" value="Transponer" class="btn btn-primary" />
                 </td>
+            </tr>
 
-
-            @*<td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>*@
-
-        }
-    </tbody>
-</table>
+        </table>
+    }
