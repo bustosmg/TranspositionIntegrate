@@ -18,7 +18,7 @@
 
         <tr>
             <td>
-                @Html.EditorFor(m => m.notasCromaticas, new { htmlAttributes = new { @readonly = "readonly" } }) &nbsp; @Html.EditorFor(m => m.IsChecked)
+                @Html.EditorFor(m => m.notasCromaticas, new { htmlAttributes = new { @readonly = "readonly", autofocus="autofocus", @class="form-control" } }) &nbsp; @Html.EditorFor(m => m.IsChecked)
             </td>
         </tr>
 

@@ -5,34 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - TranspositionWeb</title>
     @*<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />*@
+
+    <link href="https://fonts.googleapis.com/css?family=Baloo+2&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-lumen.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 
 <body>
     <header>
-            <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-                <div class="container">
+            @*<nav class="navbar navbar-expand-lg navbar-dark bg-primary">*@
+                <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                    <div class="container">
 
-                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Web de Transposición</a>
+                        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Web de Transposición</a>
 
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                            aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
+                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                                aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        
+                        @*<div class="collapse navbar-collapse" id="navbarColor01">*@
+                        <div id="navbarColor01">
+                            @*<ul class="navbar-nav">*@
+                                <ul>
+                                <li class="nav-item">
+                                    @Html.ActionLink("Principal", "Index", "Home", new { @class = "nav-link" })
+                                </li>
+                                @*Recordar cambiar Notas x Acorde *@
+                                <li>@Html.ActionLink("Acordes", "Index", "Notas", new { @class = "nav-item" })</li>
 
-                    <div class="collapse navbar-collapse" id="navbarColor01">
-                        <ul class="navbar-nav mr-auto">
-                            <li>@Html.ActionLink("Principal", "Index", "Home", new { @class = "nav-item" })</li>
-                            @*Recordar cambiar Notas x Acorde *@
-                            <li>@Html.ActionLink("Acordes", "Index", "Notas", new { @class = "nav-item" })</li>
+                                <li>@Html.ActionLink("Notas", "Index", "Notas")</li>
+                            </ul>
+                        </div>
 
-                            <li>@Html.ActionLink("Notas", "Index", "Notas")</li>
-                        </ul>
                     </div>
-
-                </div>
-            </nav>
+                </nav>
     </header>
 
     <div class="container">
