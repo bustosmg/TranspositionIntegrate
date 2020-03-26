@@ -94,14 +94,16 @@ namespace TranspositionWeb.Controllers
         }
 
         // GET: Notas/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        //public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit()
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            //if (id == null)
+            //{
+            //    return NotFound();
+            //}
 
-            var notasModel = await _context.notas.FindAsync(id);
+            //var notasModel = await _context.notas.FindAsync(id);
+            var notasModel = await _context.notas.ToListAsync();
             if (notasModel == null)
             {
                 return NotFound();
@@ -113,20 +115,27 @@ namespace TranspositionWeb.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        //[HttpPatch]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,notasCromaticas,IsChecked")] NotasModel notasModel)
+        //public ActionResult<IEnumerable<NotasModel>> Edit(int id, [Bind("Id,notasCromaticas,IsChecked")] NotasModel notasModel)
+        public ActionResult<List<NotasModel>> Edit([Bind("Id,notasCromaticas,IsChecked")] NotasModel notasModel)
         {
-            if (id != notasModel.Id)
-            {
-                return NotFound();
-            }
+            //if (id != notasModel.Id)
+            //{
+            //    return NotFound();
+            //}
 
             if (ModelState.IsValid)
             {
                 try
                 {
+                    /* 
+                     * Hacer transposicion
+                     * mostrar en pantalla
+                     
                     _context.Update(notasModel);
                     await _context.SaveChangesAsync();
+                    */
                 }
                 catch (DbUpdateConcurrencyException)
                 {
