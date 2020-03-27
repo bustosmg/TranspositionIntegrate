@@ -53,25 +53,20 @@
             </td>
         </tr>
     </tbody>
-
 </table>
 
 
 
-<table class="table">
-    @*<thead></thead>*@
-
+@*<table class="table">
     <tbody>
-
         @foreach (var item in Model)
         {
-
         <td>
             @Html.DisplayFor(modelItem => item.notasCromaticas) &nbsp; @Html.DisplayFor(modelItem => item.IsChecked)
         </td>
-    }
-        </tbody>
-    </table>
+        }
+     </tbody>
+</table>*@
 
 
     @using (Html.BeginForm("Edit", "Notas", FormMethod.Post))
@@ -80,21 +75,20 @@
 
         <table class="table">
 
-            @foreach (var item in Model)
-            {   
-                @Html.HiddenFor(modelItem=>item.Id)
-                @Html.HiddenFor(modelItem=>item.notasCromaticas)
+            @*@foreach (var item in Model)*@
+            @for (int i = 0; i < Model.Count(); i++)
+            {
+                @Html.HiddenFor(modelItem => modelItem[i].Id)
+                @Html.HiddenFor(modelItem => modelItem[i].notasCromaticas)
             <td>
                 @*@Html.EditorFor(modelItem => item.notasCromaticas, new { htmlAttributes = new { @readonly = "readonly" } })*@  
-                @Html.DisplayFor(modelItem => item.notasCromaticas)  &nbsp; @Html.EditorFor(modelItem => item.IsChecked)
+                @Html.DisplayFor(modelItem => modelItem[i].notasCromaticas)  @Html.EditorFor(modelItem => modelItem[i].IsChecked)
             </td>
             }
-
             <tr>
                 <td>
                     <input type="submit" value="Transponer" class="btn btn-primary" />
                 </td>
             </tr>
-
         </table>
     }

@@ -11,15 +11,24 @@ using TranspositionWeb.Models;
 
 namespace TranspositionWeb.Controllers
 {
+     
+
     public class NotasController : Controller
     {
         private readonly DBContexto _context;
         private readonly ILogger<NotasController> _logger;
+        private Dictionary<string, int> dTransposicion;
 
         public NotasController(DBContexto context, ILogger<NotasController> logger)
         {
             _context = context;
             _logger = logger;
+            dTransposicion = new Dictionary<string, int>()
+            {
+                { "SaxoAlto", 2 },
+                { "SaxoTenor", 1 },
+                { "Piano", 0 },
+            };
         }
 
         [HttpGet("/GetTestLog")]
@@ -114,30 +123,55 @@ namespace TranspositionWeb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,notasCromaticas,IsChecked")] NotasModel notasModel)
+        //public async Task<IActionResult> Edit(int id, [Bind("Id,notasCromaticas,IsChecked")] NotasModel notasModel)
+        public async Task<IActionResult> Edit([Bind("Id,notasCromaticas,IsChecked")] List<NotasModel> notasModel)
         {
-            if (id != notasModel.Id)
-            {
-                return NotFound();
-            }
+            //if (id != notasModel.Id)
+            //{
+            //    return NotFound();
+            //}
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(notasModel);
-                    await _context.SaveChangesAsync();
+                    /*
+                     Hacer la transposicion
+                     Enviar a la vista
+                     */
+                    List<NotasModel> algo = new List<NotasModel>();
+                    foreach (NotasModel item in notasModel)
+                    {
+                        
+                        if (item.IsChecked==true)
+                        {
+
+                            //string transponer = dTransposicion["SaxoAlto"].ToString();
+                            int ids = item.Id + dTransposicion["SaxoAlto"];
+                            NotasModel alguito = _context.notas.Find(ids); //.Where(i => i.Id == ids).First();
+                            algo.Add(alguito);
+
+                            /*
+                             Hacer la transposicion
+                             */
+                            
+                        }
+                    }
+                    return View(algo);
+
+                    //_context.Update(notasModel);
+                    //await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!NotasModelExists(notasModel.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    //if (!NotasModelExists(notasModel.Id))
+                    //{
+                    //    return NotFound();
+                    //}
+                    //else
+                    //{
+                    //    throw;
+                    //}
                 }
                 return RedirectToAction(nameof(Index));
             }
