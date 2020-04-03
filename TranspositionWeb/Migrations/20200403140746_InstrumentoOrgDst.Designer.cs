@@ -2,15 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TranspositionWeb.Contexto;
 
 namespace TranspositionWeb.Migrations
 {
     [DbContext(typeof(DBContexto))]
-    partial class DBContextoModelSnapshot : ModelSnapshot
+    [Migration("20200403140746_InstrumentoOrgDst")]
+    partial class InstrumentoOrgDst
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -53,11 +55,13 @@ namespace TranspositionWeb.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("InstrumentoDestino")
-                        .HasColumnType("int");
+                    b.Property<string>("InstrumentoDestino")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(1)");
 
-                    b.Property<int>("InstrumentoOrigen")
-                        .HasColumnType("int");
+                    b.Property<string>("InstrumentoOrigen")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(1)");
 
                     b.Property<bool>("IsChecked")
                         .HasColumnType("bit");

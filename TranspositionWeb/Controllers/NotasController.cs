@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using TranspositionWeb.Contexto;
+using TranspositionWeb.DTOs;
 using TranspositionWeb.Models;
 
 namespace TranspositionWeb.Controllers
@@ -53,8 +54,6 @@ namespace TranspositionWeb.Controllers
 
             return NoContent();
         }
-
-
 
         // GET: Notas
         public async Task<IActionResult> Index()
@@ -115,6 +114,7 @@ namespace TranspositionWeb.Controllers
             {
                 return NotFound();
             }
+
             return View(notasModel);
         }
 
@@ -123,55 +123,62 @@ namespace TranspositionWeb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(int id, [Bind("Id,notasCromaticas,IsChecked")] NotasModel notasModel)
         public async Task<IActionResult> Edit([Bind("Id,notasCromaticas,IsChecked")] List<NotasModel> notasModel)
         {
-            //if (id != notasModel.Id)
-            //{
-            //    return NotFound();
-            //}
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    /*
-                     Hacer la transposicion
-                     Enviar a la vista
-                     */
-                    List<NotasModel> algo = new List<NotasModel>();
+                    List<NotasModel> notasVista = new List<NotasModel>();
+                    List<NotaModelTransDTO> notasTrans = new List<NotaModelTransDTO>();
+
                     foreach (NotasModel item in notasModel)
                     {
-                        
-                        if (item.IsChecked==true)
+                        var notasVistaz = _context.notas.Find(item.Id);
+                        notasVista.Add(notasVistaz);
+
+                        if (item.IsChecked)
                         {
-
-                            //string transponer = dTransposicion["SaxoAlto"].ToString();
-                            int ids = item.Id + dTransposicion["SaxoAlto"];
-                            NotasModel alguito = _context.notas.Find(ids); //.Where(i => i.Id == ids).First();
-                            algo.Add(alguito);
-
                             /*
-                             Hacer la transposicion
+                             de que a que intrumento
+                             1 = Eb
+                             2 = Bb
                              */
-                            
-                        }
+
+
+                            int tonosTrans = item.InstrumentoDestino==1 ? dTransposicion["SaxoAlto"] : dTransposicion["SaxoTenor"];
+                            int ids = item.Id + tonosTrans;
+                            NotasModel notaModelo = _context.notas.Find(ids);
+
+                            NotaModelTransDTO notaTranz = new NotaModelTransDTO()
+                            {
+                                Id = notaModelo.Id,
+                                notasOrigen=item.notasCromaticas,
+                                notasTranspuesta = notaModelo.notasCromaticas,
+                                IsChecked=notaModelo.IsChecked
+                            };
+
+                            notasTrans.Add(notaTranz);
+                        } 
+
                     }
-                    return View(algo);
+                    ViewBag.PostBack = notasTrans;
+                    return View("Index", notasVista );
 
                     //_context.Update(notasModel);
                     //await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (Exception ex)
                 {
-                    //if (!NotasModelExists(notasModel.Id))
-                    //{
-                    //    return NotFound();
-                    //}
-                    //else
-                    //{
-                    //    throw;
-                    //}
+                    if (!NotasModelExists(notasModel))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -207,9 +214,26 @@ namespace TranspositionWeb.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool NotasModelExists(int id)
+        private bool NotasModelExists(List<NotasModel> notasmodel)
         {
-            return _context.notas.Any(e => e.Id == id);
+            foreach (var item in notasmodel)
+            {
+                try
+                {
+                    if (!_context.notas.Any(e => e.Id == item.Id))
+                        return false;
+
+                }
+                catch (Exception)
+                {
+
+                    throw;
+
+                }
+                return false;
+
+            }
+            return true;
         }
     }
 }

@@ -1,13 +1,12 @@
-﻿@*@model IEnumerable<TranspositionWeb.Models.NotasModel>*@
-@model List<TranspositionWeb.Models.NotasModel>
+﻿@model List<TranspositionWeb.Models.NotasModel>
+
 
 @{
     ViewData["Title"] = "Index";
 }
 
 <h1>Transposición de Notas</h1>
-<h3>DE: </h3>
-<p class="alert alert-info" style="font-size:medium">Seeccione las notas a <strong>transportar</strong></p>
+
 @*var listado = new List<SelectListItem>()
     {
            new SelectListItem()
@@ -41,54 +40,123 @@
     </thead>
     <tbody>
         <tr>
-            A
+            <h4>DE: </h4>
             <td>
                 @Html.CheckBox("de", true)
             </td>
             <td>
-                @Html.CheckBox("de", false)
+                @Html.CheckBox("de", false, new { @disabled = "disabled" })
             </td>
             <td>
-                @Html.CheckBox("de", false)
+                @Html.CheckBox("de", false, new { @disabled = "disabled" })
             </td>
         </tr>
     </tbody>
 </table>
 
-
-
-@*<table class="table">
+@*<table class="table table-bordered">
+    <thead class="table-info">
+        <tr>
+            <th>C</th>
+            <th>Eb</th>
+            <th>Bb</th>
+        </tr>
+    </thead>
     <tbody>
-        @foreach (var item in Model)
-        {
-        <td>
-            @Html.DisplayFor(modelItem => item.notasCromaticas) &nbsp; @Html.DisplayFor(modelItem => item.IsChecked)
-        </td>
-        }
-     </tbody>
+        <tr>
+            <h4>A: </h4>
+            <td>
+                @Html.CheckBox("aC", false, new { @disabled = "disabled" })
+            </td>
+            <td>
+                @Html.CheckBox("aEb", true)
+            </td>
+            <td>
+                @Html.CheckBox("aBb", false)
+            </td>
+        </tr>
+    </tbody>
 </table>*@
 
-
-    @using (Html.BeginForm("Edit", "Notas", FormMethod.Post))
-    {
-        @Html.AntiForgeryToken()
-
-        <table class="table">
-
-            @*@foreach (var item in Model)*@
-            @for (int i = 0; i < Model.Count(); i++)
+@*<table class="table">
+        <tbody>
+            @foreach (var item in Model)
             {
-                @Html.HiddenFor(modelItem => modelItem[i].Id)
-                @Html.HiddenFor(modelItem => modelItem[i].notasCromaticas)
             <td>
-                @*@Html.EditorFor(modelItem => item.notasCromaticas, new { htmlAttributes = new { @readonly = "readonly" } })*@  
-                @Html.DisplayFor(modelItem => modelItem[i].notasCromaticas)  @Html.EditorFor(modelItem => modelItem[i].IsChecked)
+                @Html.DisplayFor(modelItem => item.notasCromaticas) &nbsp; @Html.DisplayFor(modelItem => item.IsChecked)
             </td>
             }
-            <tr>
+         </tbody>
+    </table>*@
+
+<p class="alert alert-info" style="font-size:medium">
+    Seeccione las notas a
+    <strong>transportar</strong>
+</p>
+
+@using (Html.BeginForm("Edit", "Notas", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+<table class="table table-bordered">
+
+    <tr>
+        <td>
+            @Html.Display("Eb")
+            @Html.CheckBox("aEb", true)
+        </td>
+    </tr>
+
+    @for (int i = 0; i < Model.Count(); i++)
+    {
+        @Html.HiddenFor(modelItem => modelItem[i].Id)
+        @Html.HiddenFor(modelItem => modelItem[i].notasCromaticas)
+        @Html.HiddenFor(modelItem => modelItem[i].InstrumentoDestino, new { value = 1 })
+
+
+        <td class="">
+            @Html.DisplayFor(modelItem => modelItem[i].notasCromaticas) @Html.EditorFor(modelItem => modelItem[i].IsChecked)
+        </td>
+    }
+
+
+</table>
+    <table class="table">
+        <tr>
+            <td>
+                <input type="submit" value="Transponer" class="btn btn-primary" />
+            </td>
+        </tr>
+    </table>
+}
+
+@if (ViewBag.PostBack != null)
+{
+
+    <p class="alert alert-info" style="font-size:medium">
+        <strong>Notas Transpuests</strong>
+    </p>
+
+    <table class="table-hover d-xl-table-cell ">
+
+        @foreach (TranspositionWeb.DTOs.NotaModelTransDTO item in ViewBag.PostBack)
+        {
+            <tr class="ta">
                 <td>
-                    <input type="submit" value="Transponer" class="btn btn-primary" />
+                    @Html.Raw(item.notasOrigen)
+                </td>
+                <td>
+                    =>
+                </td>
+                <td>
+                    @Html.Raw(item.notasTranspuesta)
                 </td>
             </tr>
-        </table>
-    }
+
+        }
+
+    </table>
+}
+
+    @Html.ActionLink("Volver a la pagina principal", "Index")
+
